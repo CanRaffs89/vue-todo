@@ -39,29 +39,24 @@
       },
       toggleReminder(id) {
         this.tasks = this.tasks.map((task) => task.id === id ? { ...task, reminder: !task.reminder } : task)
-      }
+      },
+      async fetchTasks() {
+        const res = await fetch('api/tasks')
+
+        const data = await res.json()
+
+        return data
+      },
+      async fetchTask(id) {
+        const res = await fetch(`api/tasks/${id}`)
+
+        const data = await res.json()
+
+        return data
+      },
     },
-    created() {
-      this.tasks = [
-        {
-          id: 1,
-          text: 'Buy milk',
-          day: '26th June at 9:30am',
-          reminder: true
-        },
-        {
-          id: 2,
-          text: 'Finish book',
-          day: '28th June at 2:00pm',
-          reminder: true
-        },
-        {
-          id: 3,
-          text: 'Walk dog',
-          day: '28th June at 5:00pm',
-          reminder: false
-        }
-      ]
+    async created() {
+      this.tasks = await this.fetchTasks()
     }
   }
 </script>

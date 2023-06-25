@@ -29,13 +29,21 @@
       toggleAddTask() {
         this.showAddTask = !this.showAddTask
       },
-      addTask(task) {
-        this.tasks = [...this.tasks, task]
+      async addTask(task) {
+        const res = await fetch('api/tasks', {
+          method: 'POST', 
+          headers: {'Content-type': 'application/json'
+          },
+          body: JSON.stringify(task)
+        })
+        const data = await res.json()
+        this.tasks = [...this.tasks, data]
       },
-      deleteTask(id) {
-        if(confirm('Are you sure you want to delete this task?')) {
-          this.tasks = this.tasks.filter((task) => task.id !== id)
-        }
+      async deleteTask(id) {
+        const res = await fetch(`api/tasks/${id}`, {
+          method: 'DELETE'
+        })
+        this.tasks = this.tasks.filter((task) => task.id !== id)
       },
       toggleReminder(id) {
         this.tasks = this.tasks.map((task) => task.id === id ? { ...task, reminder: !task.reminder } : task)
